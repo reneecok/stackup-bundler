@@ -8,6 +8,8 @@ import (
 
 var (
 	EthereumChainID        = big.NewInt(1)
+	BSCChainID             = big.NewInt(56)
+	BSCTestnetChainID      = big.NewInt(97)
 	GoerliChainID          = big.NewInt(5)
 	SepoliaChainID         = big.NewInt(11155111)
 	ArbitrumOneChainID     = big.NewInt(42161)

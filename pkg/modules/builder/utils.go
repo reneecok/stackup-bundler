@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mapset "github.com/deckarep/golang-set/v2"
+
 	"github.com/stackup-wallet/stackup-bundler/internal/config"
 )
 
@@ -14,6 +15,8 @@ var (
 		config.EthereumChainID.Uint64(),
 		config.GoerliChainID.Uint64(),
 		config.SepoliaChainID.Uint64(),
+		config.BSCChainID.Uint64(),
+		config.BSCTestnetChainID.Uint64(),
 	)
 
 	DefaultWaitTimeout = 72 * time.Second
