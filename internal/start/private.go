@@ -6,12 +6,15 @@ import (
 	"log"
 	"net/http"
 
-	badger "github.com/dgraph-io/badger/v3"
+	"github.com/dgraph-io/badger/v3"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel"
+
 	"github.com/stackup-wallet/stackup-bundler/internal/config"
 	"github.com/stackup-wallet/stackup-bundler/internal/logger"
 	"github.com/stackup-wallet/stackup-bundler/internal/o11y"
@@ -29,8 +32,6 @@ import (
 	"github.com/stackup-wallet/stackup-bundler/pkg/modules/gasprice"
 	"github.com/stackup-wallet/stackup-bundler/pkg/modules/relay"
 	"github.com/stackup-wallet/stackup-bundler/pkg/signer"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
-	"go.opentelemetry.io/otel"
 )
 
 func PrivateMode() {
@@ -144,14 +145,14 @@ func PrivateMode() {
 		rep.CheckStatus(),
 		rep.ValidateOpLimit(),
 		check.ValidateOpValues(),
-		check.SimulateOp(),
+		//check.SimulateOp(),
 		rep.IncOpsSeen(),
 	)
 
 	// Init Bundler
 	b := bundler.New(mem, chain, conf.SupportedEntryPoints)
 	b.SetGetBaseFeeFunc(gasprice.GetBaseFeeWithEthClient(eth))
-	b.SetGetGasTipFunc(gasprice.GetGasTipWithEthClient(eth))
+	//b.SetGetGasTipFunc(gasprice.GetGasTipWithEthClient(eth))
 	b.SetGetLegacyGasPriceFunc(gasprice.GetLegacyGasPriceWithEthClient(eth))
 	b.UseLogger(logr)
 	if err := b.UserMeter(otel.GetMeterProvider().Meter("bundler")); err != nil {
@@ -163,7 +164,7 @@ func PrivateMode() {
 		gasprice.FilterUnderpriced(),
 		batch.SortByNonce(),
 		batch.MaintainGasLimit(conf.MaxBatchGasLimit),
-		check.CodeHashes(),
+		//check.CodeHashes(),
 		check.PaymasterDeposit(),
 		check.SimulateBatch(),
 		relayer.SendUserOperation(),

@@ -6,13 +6,16 @@ import (
 	"log"
 	"net/http"
 
-	badger "github.com/dgraph-io/badger/v3"
+	"github.com/dgraph-io/badger/v3"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/metachris/flashbotsrpc"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel"
+
 	"github.com/stackup-wallet/stackup-bundler/internal/config"
 	"github.com/stackup-wallet/stackup-bundler/internal/logger"
 	"github.com/stackup-wallet/stackup-bundler/internal/o11y"
@@ -30,8 +33,6 @@ import (
 	"github.com/stackup-wallet/stackup-bundler/pkg/modules/expire"
 	"github.com/stackup-wallet/stackup-bundler/pkg/modules/gasprice"
 	"github.com/stackup-wallet/stackup-bundler/pkg/signer"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
-	"go.opentelemetry.io/otel"
 )
 
 func SearcherMode() {
@@ -143,7 +144,7 @@ func SearcherMode() {
 		rep.CheckStatus(),
 		rep.ValidateOpLimit(),
 		check.ValidateOpValues(),
-		check.SimulateOp(),
+		//check.SimulateOp(),
 		// TODO: add p2p propagation module
 		rep.IncOpsSeen(),
 	)

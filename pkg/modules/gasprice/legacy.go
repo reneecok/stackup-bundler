@@ -1,7 +1,6 @@
 package gasprice
 
 import (
-	"context"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -21,10 +20,11 @@ func NoopGetLegacyGasPriceFunc() GetLegacyGasPriceFunc {
 // GetLegacyGasPriceWithEthClient returns a GetLegacyGasPriceFunc using an eth client.
 func GetLegacyGasPriceWithEthClient(eth *ethclient.Client) GetLegacyGasPriceFunc {
 	return func() (*big.Int, error) {
-		gp, err := eth.SuggestGasPrice(context.Background())
-		if err != nil {
-			return nil, err
-		}
-		return gp, nil
+		return big.NewInt(3e9), nil
+		//gp, err := eth.SuggestGasPrice(context.Background())
+		//if err != nil {
+		//	return nil, err
+		//}
+		//return gp, nil
 	}
 }

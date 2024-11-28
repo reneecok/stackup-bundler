@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/go-logr/logr"
+
 	"github.com/stackup-wallet/stackup-bundler/pkg/entrypoint/transaction"
 	"github.com/stackup-wallet/stackup-bundler/pkg/modules"
 	"github.com/stackup-wallet/stackup-bundler/pkg/signer"
@@ -73,22 +74,22 @@ func (r *Relayer) SendUserOperation() modules.BatchHandlerFunc {
 			BaseFee:     ctx.BaseFee,
 			Tip:         ctx.Tip,
 			GasPrice:    ctx.GasPrice,
-			GasLimit:    0,
+			GasLimit:    100000,
 			WaitTimeout: r.waitTimeout,
 		}
 		// Estimate gas for handleOps() and drop all userOps that cause unexpected reverts.
-		for len(ctx.Batch) > 0 {
-			est, revert, err := transaction.EstimateHandleOpsGas(&opts)
-
-			if err != nil {
-				return err
-			} else if revert != nil {
-				ctx.MarkOpIndexForRemoval(revert.OpIndex, revert.Reason)
-			} else {
-				opts.GasLimit = est
-				break
-			}
-		}
+		//for len(ctx.Batch) > 0 {
+		//	est, revert, err := transaction.EstimateHandleOpsGas(&opts)
+		//
+		//	if err != nil {
+		//		return err
+		//	} else if revert != nil {
+		//		ctx.MarkOpIndexForRemoval(revert.OpIndex, revert.Reason)
+		//	} else {
+		//		opts.GasLimit = est
+		//		break
+		//	}
+		//}
 
 		// Call handleOps() with gas estimate. Any userOps that cause a revert at this stage will be
 		// caught and dropped in the next iteration.

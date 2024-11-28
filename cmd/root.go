@@ -18,7 +18,9 @@ func main() {
 	//	os.Exit(1)
 	//}
 
-	start.SearcherMode()
+	start.PrivateMode()
+
+	//start.SearcherMode()
 }
 
 func init() {}
