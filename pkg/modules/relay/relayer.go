@@ -95,7 +95,7 @@ func (r *Relayer) SendUserOperation() modules.BatchHandlerFunc {
 		// caught and dropped in the next iteration.
 		if len(ctx.Batch) > 0 {
 			if txn, err := transaction.HandleOps(&opts); err != nil {
-				return err
+				ctx.MarkOpIndexForRemoval(0, "send only once in debug mode")
 			} else {
 				ctx.Data["txn_hash"] = txn.Hash().String()
 			}
